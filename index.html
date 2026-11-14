@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>رستوران قلمستان</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;700&display=swap">
+<style>
+/* Layout: a deep-green hero with a row of poplars (قلمستان = poplar grove), then three sticky tabs
+   (menu / route / contact) over a single reading column, and a fixed phone-order bar at the bottom. */
+:root {
+  --bg: #F3F6EF; --surface: #FFFFFF; --ink: #14291F; --muted: #5B6B60; --line: #D5DDD0;
+  --green: #1F5A3F; --green-soft: #DCE9DC; --saffron: #E3A81F; --on-saffron: #1E1A08;
+  --hero: #1B4D37; --hero-ink: #F1F5EA; --hero-muted: #B9CFBF; --leaf-a: #2F7350; --leaf-b: #3F8A62; --leaf-c: #256344;
+  --display: "Lalezar", "Vazirmatn", Tahoma, sans-serif;
+  --body: "Vazirmatn", Tahoma, "Segoe UI", sans-serif;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0E1A14; --surface: #16261D; --ink: #E8EFE4; --muted: #9BAC9F; --line: #2A3D31;
+  --green: #7FC79B; --green-soft: #1D3327; --saffron: #F0B93A; --on-saffron: #1E1A08;
+  --hero: #12281D; --hero-ink: #F1F5EA; --hero-muted: #A5BCAC; --leaf-a: #2A6146; --leaf-b: #357A57; --leaf-c: #1F4E38;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0E1A14; --surface: #16261D; --ink: #E8EFE4; --muted: #9BAC9F; --line: #2A3D31;
+  --green: #7FC79B; --green-soft: #1D3327; --saffron: #F0B93A; --on-saffron: #1E1A08;
+  --hero: #12281D; --hero-ink: #F1F5EA; --hero-muted: #A5BCAC; --leaf-a: #2A6146; --leaf-b: #357A57; --leaf-c: #1F4E38;
+  color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.9; padding-bottom: 96px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--hero); }
+.wrap { max-width: 880px; margin-inline: auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--saffron); outline-offset: 2px; }
+h1, h2, h3, p { margin: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* sample notice */
+.notice { background: var(--saffron); color: var(--on-saffron); font-size: 13px; }
+.notice .wrap { padding-block: 6px; text-align: center; }
+
+/* hero */
+.hero { background: var(--hero); color: var(--hero-ink); overflow: hidden; }
+.hero .wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-block: 36px 0; }
+.hero-text { padding-bottom: 32px; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.eyebrow { color: var(--hero-muted); font-size: 14px; }
+.hero h1 { font-family: var(--display); font-weight: 400; font-size: clamp(64px, 17vw, 128px); line-height: 1.05; }
+.hero p { color: var(--hero-muted); max-width: 34ch; }
+.grove { display: flex; align-items: flex-end; gap: 6px; flex: none; }
+.grove i { display: block; width: 22px; border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%; position: relative; }
+.grove i::after { content: ""; position: absolute; bottom: 0; left: 50%; width: 3px; height: 18%; margin-left: -1.5px; background: var(--hero-muted); opacity: .5; }
+.grove i:nth-child(3n+1) { background: var(--leaf-a); }
+.grove i:nth-child(3n+2) { background: var(--leaf-b); }
+.grove i:nth-child(3n) { background: var(--leaf-c); }
+@media (max-width: 520px) { .grove i:nth-child(n+5) { display: none; } .grove i { width: 18px; } }
+
+/* tabs */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--hero); }
+.tabs .wrap { display: flex; gap: 4px; }
+.tab { flex: 1; background: none; border: 0; padding: 14px 8px; color: var(--hero-muted); font-weight: 500; border-radius: 12px 12px 0 0; }
+.tab[aria-selected="true"] { background: var(--bg); color: var(--ink); font-weight: 700; }
+
+.panel { padding-block: 28px 8px; display: flex; flex-direction: column; gap: 24px; }
+.panel h2 { font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1.3; text-wrap: balance; }
+.lead { color: var(--muted); max-width: 60ch; }
+
+/* menu */
+.featured { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 620px) { .featured { grid-template-columns: 1fr; } }
+.dish { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.photo { aspect-ratio: 4 / 3; max-width: 100%; display: grid; place-items: center; color: var(--muted); font-size: 13px;
+  background: repeating-linear-gradient(135deg, var(--green-soft) 0 10px, transparent 10px 20px), var(--surface); }
+.photo span { background: var(--surface); padding: 2px 10px; border-radius: 99px; border: 1px dashed var(--line); }
+@media (max-width: 620px) { .photo { aspect-ratio: 16 / 7; } }
+.dish-body { padding: 12px 14px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.dish-body b { font-weight: 700; }
+.price { color: var(--green); font-weight: 700; white-space: nowrap; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 4px 16px; font-size: 14px; }
+.chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--bg); font-weight: 700; }
+.unit { color: var(--muted); font-size: 13px; }
+
+.cat { display: flex; flex-direction: column; gap: 4px; }
+.cat h3 { font-family: var(--display); font-weight: 400; font-size: 24px; color: var(--green); }
+.cat ul { list-style: none; margin: 0; padding: 0; }
+.cat li { display: flex; align-items: baseline; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.cat li > div { min-width: 0; }
+.cat li small { display: block; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.dots { flex: 1; min-width: 16px; border-bottom: 2px dotted var(--line); transform: translateY(-4px); }
+
+/* route */
+.map { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.map svg { display: block; width: 100%; height: auto; }
+.map .land { fill: var(--green-soft); } .map .road { stroke: var(--surface); fill: none; stroke-linecap: round; }
+.map .road-edge { stroke: var(--line); fill: none; stroke-linecap: round; }
+.map .route { stroke: var(--green); fill: none; stroke-width: 4; stroke-dasharray: 2 9; stroke-linecap: round; }
+.map .pin { fill: var(--saffron); stroke: var(--on-saffron); stroke-width: 1.5; } .map .pin-dot { fill: var(--on-saffron); }
+.map text { fill: var(--muted); font-family: var(--body); font-size: 13px; }
+.map .here { fill: var(--ink); font-weight: 700; font-size: 15px; }
+.map figcaption { padding: 8px 14px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); }
+figure { margin: 0; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border-radius: 12px; padding: 10px 20px; font-weight: 700; border: 1px solid var(--line); background: var(--surface); }
+.btn.primary { background: var(--green); border-color: var(--green); color: var(--bg); }
+.facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 32px; margin: 0; }
+@media (max-width: 620px) { .facts { grid-template-columns: 1fr; } }
+.facts div { padding: 12px 0; border-bottom: 1px solid var(--line); min-width: 0; }
+.facts dt { color: var(--muted); font-size: 13px; }
+.facts dd { margin: 0; font-weight: 500; }
+
+/* contact */
+.phones { display: flex; flex-direction: column; gap: 10px; }
+.phone { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; }
+.phone small { display: block; color: var(--muted); font-size: 13px; }
+.phone .tel { font-size: 24px; font-weight: 700; direction: ltr; unicode-bidi: isolate; user-select: all; text-decoration: none; }
+.copy { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 4px 14px; font-size: 14px; }
+
+/* footer */
+footer { margin-top: 32px; border-top: 1px solid var(--line); }
+footer .wrap { padding-block: 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; }
+.social { display: flex; flex-wrap: wrap; gap: 8px; }
+.social a { text-decoration: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 4px 16px; font-size: 14px; font-weight: 500; }
+footer small { color: var(--muted); }
+
+/* fixed order bar */
+.callbar { position: fixed; inset: auto 0 0 0; z-index: 6; background: var(--hero); color: var(--hero-ink);
+  padding: 10px var(--gutter-r) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gutter-l); }
+.callbar-in { max-width: 848px; margin-inline: auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.callbar small { display: block; color: var(--hero-muted); font-size: 12px; line-height: 1.5; }
+.callbar .tel { font-size: 20px; font-weight: 700; direction: ltr; unicode-bidi: isolate; user-select: all; text-decoration: none; }
+.callbar .copy { background: var(--saffron); border-color: var(--saffron); color: var(--on-saffron); font-weight: 700; padding: 8px 18px; white-space: nowrap; }
+</style>
+
+</head>
+<body>
+<div dir="rtl" lang="fa">
+  <div class="notice"><div class="wrap">نسخهٔ نمونه: عکس‌ها، قیمت‌ها، نشانی و شماره‌ها با اطلاعات واقعی شما جایگزین می‌شود.</div></div>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-text">
+        <span class="eyebrow">رستوران و بیرون‌بر</span>
+        <h1>قلمستان</h1>
+        <p>غذای ایرانی، هر روز از ۱۲ ظهر تا ۱۱ شب. منو را ببینید و تلفنی سفارش دهید.</p>
+      </div>
+      <div class="grove" aria-hidden="true">
+        <i style="height:120px"></i><i style="height:168px"></i><i style="height:142px"></i><i style="height:184px"></i><i style="height:150px"></i><i style="height:172px"></i><i style="height:128px"></i>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="بخش‌های سایت">
+    <div class="wrap" role="tablist">
+      <button class="tab" role="tab" id="tab-menu" data-view="menu" aria-controls="menu" aria-selected="true">منوی غذا</button>
+      <button class="tab" role="tab" id="tab-route" data-view="route" aria-controls="route" aria-selected="false">نقشه و مسیر</button>
+      <button class="tab" role="tab" id="tab-contact" data-view="contact" aria-controls="contact" aria-selected="false">تماس با قلمستان</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <!-- MENU -->
+    <section class="panel" id="menu" role="tabpanel" aria-labelledby="tab-menu">
+      <div>
+        <h2>منوی قلمستان</h2>
+        <p class="lead">این منو فقط برای دیدن است. برای سفارش با شمارهٔ پایین صفحه تماس بگیرید.</p>
+      </div>
+
+      <div class="featured">
+        <article class="dish"><div class="photo"><span>جای عکس شما</span></div><div class="dish-body"><b>چلوکباب سلطانی</b><span class="price num">۹۵۰</span></div></article>
+        <article class="dish"><div class="photo"><span>جای عکس شما</span></div><div class="dish-body"><b>باقالی‌پلو با ماهیچه</b><span class="price num">۸۹۰</span></div></article>
+        <article class="dish"><div class="photo"><span>جای عکس شما</span></div><div class="dish-body"><b>جوجه‌کباب زعفرانی</b><span class="price num">۳۶۰</span></div></article>
+      </div>
+
+      <div class="chips" role="group" aria-label="دسته‌بندی منو">
+        <button class="chip" id="chip-all" data-cat="all" aria-pressed="true">همه</button>
+        <button class="chip" id="chip-kabab" data-cat="kabab" aria-pressed="false">کباب‌ها</button>
+        <button class="chip" id="chip-khorak" data-cat="khorak" aria-pressed="false">خوراک و پلو</button>
+        <button class="chip" id="chip-pish" data-cat="pish" aria-pressed="false">پیش‌غذا</button>
+        <button class="chip" id="chip-nush" data-cat="nush" aria-pressed="false">نوشیدنی</button>
+      </div>
+      <span class="unit">قیمت‌ها به هزار تومان است.</span>
+
+      <div class="cat" data-cat="kabab">
+        <h3>کباب‌ها</h3>
+        <ul>
+          <li><div>چلوکباب کوبیده<small>دو سیخ، با برنج ایرانی و گوجه</small></div><span class="dots"></span><span class="price num">۳۲۰</span></li>
+          <li><div>جوجه‌کباب زعفرانی<small>سینهٔ مرغ، با برنج ایرانی</small></div><span class="dots"></span><span class="price num">۳۶۰</span></li>
+          <li><div>چلوکباب بختیاری<small>یک سیخ ترکیب جوجه و برگ</small></div><span class="dots"></span><span class="price num">۵۹۰</span></li>
+          <li><div>چلوکباب برگ<small>فیلهٔ گوسفندی</small></div><span class="dots"></span><span class="price num">۷۸۰</span></li>
+          <li><div>چلوکباب سلطانی<small>یک سیخ برگ و یک سیخ کوبیده</small></div><span class="dots"></span><span class="price num">۹۵۰</span></li>
+          <li><div>شیشلیک<small>شش تکه، با برنج ایرانی</small></div><span class="dots"></span><span class="price num">۱٬۲۰۰</span></li>
+        </ul>
+      </div>
+
+      <div class="cat" data-cat="khorak">
+        <h3>خوراک و پلو</h3>
+        <ul>
+          <li><div>زرشک‌پلو با مرغ</div><span class="dots"></span><span class="price num">۳۴۰</span></li>
+          <li><div>ته‌چین مرغ</div><span class="dots"></span><span class="price num">۳۳۰</span></li>
+          <li><div>چلوخورش قیمه</div><span class="dots"></span><span class="price num">۲۹۰</span></li>
+          <li><div>چلوخورش قورمه‌سبزی</div><span class="dots"></span><span class="price num">۳۱۰</span></li>
+          <li><div>باقالی‌پلو با ماهیچه</div><span class="dots"></span><span class="price num">۸۹۰</span></li>
+        </ul>
+      </div>
+
+      <div class="cat" data-cat="pish">
+        <h3>پیش‌غذا</h3>
+        <ul>
+          <li><div>سوپ جو</div><span class="dots"></span><span class="price num">۹۵</span></li>
+          <li><div>کشک بادمجان</div><span class="dots"></span><span class="price num">۱۸۰</span></li>
+          <li><div>زیتون پرورده</div><span class="dots"></span><span class="price num">۱۱۰</span></li>
+          <li><div>سالاد شیرازی</div><span class="dots"></span><span class="price num">۷۰</span></li>
+          <li><div>ماست و خیار</div><span class="dots"></span><span class="price num">۶۰</span></li>
+        </ul>
+      </div>
+
+      <div class="cat" data-cat="nush">
+        <h3>نوشیدنی</h3>
+        <ul>
+          <li><div>دوغ محلی</div><span class="dots"></span><span class="price num">۴۵</span></li>
+          <li><div>نوشابه</div><span class="dots"></span><span class="price num">۴۰</span></li>
+          <li><div>چای</div><span class="dots"></span><span class="price num">۳۰</span></li>
+          <li><div>آب معدنی</div><span class="dots"></span><span class="price num">۲۰</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ROUTE -->
+    <section class="panel" id="route" role="tabpanel" aria-labelledby="tab-route" hidden>
+      <div>
+        <h2>مسیر رسیدن به قلمستان</h2>
+        <p class="lead">یکی از مسیریاب‌ها را باز کنید تا مسیر از جایی که هستید نشان داده شود.</p>
+      </div>
+
+      <figure class="map">
+        <svg viewBox="0 0 800 360" role="img" aria-label="نقشهٔ شماتیک محل رستوران">
+          <rect class="land" width="800" height="360"/>
+          <path class="road-edge" stroke-width="34" d="M-20 250 C200 230 420 270 820 210"/>
+          <path class="road" stroke-width="28" d="M-20 250 C200 230 420 270 820 210"/>
+          <path class="road-edge" stroke-width="24" d="M300 -20 C320 120 280 240 330 380"/>
+          <path class="road" stroke-width="18" d="M300 -20 C320 120 280 240 330 380"/>
+          <path class="road-edge" stroke-width="20" d="M560 -20 C540 90 580 170 550 232"/>
+          <path class="road" stroke-width="14" d="M560 -20 C540 90 580 170 550 232"/>
+          <path class="route" d="M40 248 C180 236 250 244 300 236 C306 190 304 150 306 118"/>
+          <text x="690" y="205" text-anchor="middle">خیابان اصلی</text>
+          <text x="352" y="340" text-anchor="start">خیابان فرعی</text>
+          <path class="pin" d="M306 60 c-20 0 -34 15 -34 33 c0 24 34 52 34 52 s34 -28 34 -52 c0 -18 -14 -33 -34 -33z"/>
+          <circle class="pin-dot" cx="306" cy="93" r="10"/>
+          <text class="here" x="262" y="98" text-anchor="start">رستوران قلمستان</text>
+        </svg>
+        <figcaption>طرح نمونه. در سایت اصلی، نقشهٔ زنده با موقعیت دقیق رستوران اینجا قرار می‌گیرد.</figcaption>
+      </figure>
+
+      <div class="btns">
+        <a class="btn primary" href="https://www.google.com/maps" target="_blank" rel="noopener">مسیریابی با گوگل مپ</a>
+        <a class="btn" href="https://neshan.org" target="_blank" rel="noopener">نشان</a>
+        <a class="btn" href="https://balad.ir" target="_blank" rel="noopener">بلد</a>
+      </div>
+
+      <dl class="facts">
+        <div><dt>نشانی</dt><dd>نشانی کامل رستوران شما اینجا نوشته می‌شود</dd></div>
+        <div><dt>ساعت کار</dt><dd>هر روز، ۱۲ ظهر تا ۱۱ شب</dd></div>
+        <div><dt>پارکینگ</dt><dd>توضیح پارکینگ و دسترسی</dd></div>
+        <div><dt>بیرون‌بر</dt><dd>تحویل حضوری و ارسال با پیک</dd></div>
+      </dl>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="panel" id="contact" role="tabpanel" aria-labelledby="tab-contact" hidden>
+      <div>
+        <h2>تماس با قلمستان</h2>
+        <p class="lead">سفارش غذا، رزرو میز و هماهنگی مهمانی فقط تلفنی انجام می‌شود.</p>
+      </div>
+
+      <div class="phones">
+        <div class="phone">
+          <div><small>سفارش بیرون‌بر</small><a class="tel num" href="tel:+989120000000">۰۹۱۲ ۰۰۰ ۰۰۰۰</a></div>
+          <button class="copy" id="copy-order" data-copy="09120000000">کپی شماره</button>
+        </div>
+        <div class="phone">
+          <div><small>رزرو میز و مهمانی</small><a class="tel num" href="tel:+982100000000">۰۲۱ ۰۰۰۰ ۰۰۰۰</a></div>
+          <button class="copy" id="copy-reserve" data-copy="02100000000">کپی شماره</button>
+        </div>
+      </div>
+
+      <dl class="facts">
+        <div><dt>ساعت پاسخگویی</dt><dd>هر روز، ۱۱ صبح تا ۱۱ شب</dd></div>
+        <div><dt>نشانی</dt><dd>نشانی کامل رستوران شما اینجا نوشته می‌شود</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="social" aria-label="شبکه‌های اجتماعی">
+        <a href="https://www.instagram.com" target="_blank" rel="noopener">اینستاگرام</a>
+        <a href="https://rubika.ir" target="_blank" rel="noopener">روبیکا</a>
+        <a href="https://ble.ir" target="_blank" rel="noopener">بله</a>
+        <a href="https://eitaa.com" target="_blank" rel="noopener">ایتا</a>
+      </div>
+      <small>رستوران قلمستان</small>
+    </div>
+  </footer>
+
+  <div class="callbar">
+    <div class="callbar-in">
+      <div><small>سفارش تلفنی</small><a class="tel num" href="tel:+989120000000">۰۹۱۲ ۰۰۰ ۰۰۰۰</a></div>
+      <button class="copy" id="copy-bar" data-copy="09120000000">کپی شماره</button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.documentElement.lang = 'fa';
+document.documentElement.dir = 'rtl';
+
+var views = ['menu', 'route', 'contact'];
+function show(view) {
+  if (views.indexOf(view) < 0) view = 'menu';
+  views.forEach(function (v) {
+    document.getElementById(v).hidden = v !== view;
+    document.getElementById('tab-' + v).setAttribute('aria-selected', String(v === view));
+  });
+}
+document.querySelectorAll('.tab').forEach(function (t) {
+  t.addEventListener('click', function () {
+    var v = t.dataset.view;
+    show(v);
+    try { history.replaceState(null, '', '#' + v); } catch (e) { location.hash = v; }
+  });
+});
+window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+show(location.hash.slice(1));
+
+document.querySelectorAll('.chip').forEach(function (c) {
+  c.addEventListener('click', function () {
+    var cat = c.dataset.cat;
+    document.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+    document.querySelectorAll('.cat').forEach(function (s) { s.hidden = cat !== 'all' && s.dataset.cat !== cat; });
+  });
+});
+
+document.querySelectorAll('.copy').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var label = b.textContent;
+    function done() { b.textContent = 'کپی شد'; setTimeout(function () { b.textContent = label; }, 1600); }
+    function fallback() {
+      var tel = b.parentElement.querySelector('.tel');
+      var r = document.createRange(); r.selectNodeContents(tel);
+      var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      b.textContent = 'شماره انتخاب شد'; setTimeout(function () { b.textContent = label; }, 1600);
+    }
+    try { navigator.clipboard.writeText(b.dataset.copy).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+</body>
+</html>
